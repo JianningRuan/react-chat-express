@@ -11,7 +11,9 @@ router.get('/login', function (req, res) {
 });
 
 router.post('/register', function (req, res) {
-    res.json({code: 1})
+    console.log(req.body);
+    const {user, password, type} = req.body;
+    res.json({code: 1, user: user})
 });
 
 module.exports = router;
