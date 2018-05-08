@@ -2,28 +2,33 @@ const express = require('express');
 const router = express.Router();
 const model = require('./../model');
 const User = model.getModel('user');
-const addMd5 = require('./../unit');
+const unit = require('./../unit');
 
 
 router.get('/info', function (req, res) {
-        res.json({code: 0})
+    const { userId } = req.cookies; // 获取cookie
+    if (!userId) {
+        return res.json({code: 0})
+    }
+    User.findOne({_id: userId}, {password: 0, __v: 0}, function (err, doc) {
+        if (err){
+            return res.json({code: 0, errMsg: '账号校验错误'})
+        }
+        res.json({code: 1, data: doc})
+    })
+    
 });
 
 router.post('/login', function (req, res) {
-    console.log(req.body);
     const {user, password } = req.body;
-    console.log(user);
     User.findOne({user}, function (err, doc) {
-        console.log('login-msg', doc);
         if (doc){ // 有账号
-            let passwordToMd5 = addMd5(password);
+            let passwordToMd5 = unit.addMd5(password);
             if (doc.password === passwordToMd5){ // 密码正确
-                let data = doc;
-                console.log(typeof (data));
-                console.log(data['password']);
-                delete data['password'];
-                console.log(data);
-                return res.json({code: 1, data: data})
+                const {user, type, _id} = doc;
+                // 保存cookie
+                res.cookie('userId', _id, {maxAge: 1000 * 60 * 60 * 24}); // cookie时长设为一天
+                return res.json({code: 1, data: {user, type, _id}})
             }
         }
         res.json({code: 0, errMsg: '账号或密码错误'})
@@ -36,7 +41,7 @@ router.post('/register', function (req, res) {
         if (doc){
             return res.json({code: 0, errMsg: '已存在该用户'})
         }
-        let registerUser = new User({user, password: addMd5(password), type});
+        let registerUser = new User({user, password: unit.addMd5(password), type});
         registerUser.save(function (e, d) {
             if (e) {
                 return res.join({code: 0, errMsg: '保存错误'})
