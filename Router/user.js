@@ -50,8 +50,22 @@ router.post('/register', function (req, res) {
             res.json({code: 1, data: {user, type, _id}})
         });
     });
+});
 
-
+router.post('/updateInfo', function (req, res) {
+    console.log(req.body);
+    const userId = req.cookies.userId;
+    if (!userId){
+        return res.json({code: 0, errMsg: '没有登录'})
+    }
+    // const {desc, title, company, money} = req.body;
+    User.findByIdAndUpdate(userId, req.body, function (err, doc) {
+        if (err){
+            return res.json({code: 0, errMsg: '保存错误'})
+        }
+        console.log('更新后：', doc);
+        return res.json({code: 1, data: Object.assign({}, {user: doc.user, type: doc.type}, req.body)})
+    })
 });
 
 module.exports = router;
