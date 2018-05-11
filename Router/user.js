@@ -25,10 +25,10 @@ router.post('/login', function (req, res) {
         if (doc){ // 有账号
             let passwordToMd5 = unit.addMd5(password);
             if (doc.password === passwordToMd5){ // 密码正确
-                const {user, type, _id} = doc;
+                const {user, type, _id, headPic, desc, title, company, money} = doc;
                 // 保存cookie
                 res.cookie('userId', _id, {maxAge: 1000 * 60 * 60 * 24}); // cookie时长设为一天
-                return res.json({code: 1, data: {user, type, _id}})
+                return res.json({code: 1, data: {user, type, _id, headPic, desc, title, company, money}})
             }
         }
         res.json({code: 0, errMsg: '账号或密码错误'})
