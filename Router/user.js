@@ -68,4 +68,15 @@ router.post('/updateInfo', function (req, res) {
     })
 });
 
+router.get('/list', function (req, res) {
+    console.log(req.query);
+    const type = req.query;
+    User.find(type, function (err, doc) {
+        if (err){
+            return res.json({code: 0, errMsg: '数据库出错'})
+        }
+        return res.json({code: 1, data: doc})
+    })
+});
+
 module.exports = router;
