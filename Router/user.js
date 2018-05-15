@@ -11,6 +11,7 @@ router.get('/info', function (req, res) {
         return res.json({code: 0})
     }
     User.findOne({_id: userId}, {password: 0, __v: 0}, function (err, doc) {
+        console.log(doc);
         if (err){
             return res.json({code: 0, errMsg: '账号校验错误'})
         }
@@ -53,7 +54,6 @@ router.post('/register', function (req, res) {
 });
 
 router.post('/updateInfo', function (req, res) {
-    console.log(req.body);
     const userId = req.cookies.userId;
     if (!userId){
         return res.json({code: 0, errMsg: '没有登录'})
@@ -63,13 +63,11 @@ router.post('/updateInfo', function (req, res) {
         if (err){
             return res.json({code: 0, errMsg: '保存错误'})
         }
-        console.log('更新后：', doc);
         return res.json({code: 1, data: Object.assign({}, {user: doc.user, type: doc.type}, req.body)})
     })
 });
 
 router.get('/list', function (req, res) {
-    console.log(req.query);
     const type = req.query;
     User.find(type, function (err, doc) {
         if (err){
