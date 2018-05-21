@@ -25,4 +25,17 @@ router.get('/getMsgList', function (req, res) {
 
 });
 
+router.post('/readMsg', function (req, res) {
+    const userId = req.cookies.userId;
+    const from = req.body;
+    console.log(userId, from);
+    Chat.update({from, to: userId}, {'$set': {read: true}}, {multi: true}, function (err, doc) {
+        console.log(doc);
+        if (!err){
+            return res.json({code: 1, num: doc.nModified})
+        }
+        res.json({code: 0, errMsg: '数据库出错'})
+    })
+});
+
 module.exports = router;
