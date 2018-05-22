@@ -8,6 +8,7 @@ const unit = require('./../unit');
 
 
 router.get('/info', function (req, res) {
+    console.log('66');
     const { userId } = req.cookies; // 获取cookie
     if (!userId) {
         return res.json({code: 0})
