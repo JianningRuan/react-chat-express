@@ -13,7 +13,6 @@ router.get('/info', function (req, res) {
         return res.json({code: 0})
     }
     User.findOne({_id: userId}, {password: 0, __v: 0}, function (err, doc) {
-        console.log(doc);
         if (err){
             return res.json({code: 0, errMsg: '账号校验错误'})
         }

@@ -28,7 +28,6 @@ server.listen(9093, function () {
 io.on('connection', (socket)=>{
     console.log('链接上了');
     socket.on('sendMsg', (data)=>{
-        console.log(data);
         const {from, to, msg} = data;
         const chatId = [from, to].sort().join('_');
         Chat.create({chatId, from, to, msg}, function (err, doc) {
