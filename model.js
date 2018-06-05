@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const DB_URL = 'mongodb://localhost:27017/react-chat';
+// const DB_URL = 'mongodb://localhost:27017/react-chat';
+const DB_URL = 'mongodb://47.104.232.7:27017/react-chat';
 mongoose.connect(DB_URL);
 
 const models = {
