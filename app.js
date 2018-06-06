@@ -6,13 +6,15 @@ const app = express();
 
 // 跨域设置请求头
 app.all('*', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://47.104.232.7:8080");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-File-Name");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("Content-Type", "application/json;charset=utf-8");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("X-Powered-By",' 3.2.1');
-    res.header('Cache-Control', 'no-store');
+    if (req.headers.origin === 'http://47.104.232.7:8080' || req.headers.origin === 'http://localhost:3000') {
+        res.header("Access-Control-Allow-Origin", req.headers.origin);
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-File-Name");
+        res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+        res.header("Content-Type", "application/json;charset=utf-8");
+        res.header("Access-Control-Allow-Credentials", "true");
+        res.header("X-Powered-By",' 3.2.1');
+        res.header('Cache-Control', 'no-store');
+    }
     next();
 });
 /*app.all('*',function (req, res, next) {

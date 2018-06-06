@@ -8,7 +8,6 @@ const unit = require('./../unit');
 
 
 router.get('/info', function (req, res) {
-    console.log('66');
     const { userId } = req.cookies; // 获取cookie
     if (!userId) {
         return res.json({code: 0})
@@ -50,6 +49,8 @@ router.post('/register', function (req, res) {
                 return res.join({code: 0, errMsg: '保存错误'})
             }
             const {user, type, _id} = d;
+            // 保存cookie
+            res.cookie('userId', _id, {maxAge: 1000 * 60 * 60 * 24}); // cookie时长设为一天
             res.json({code: 1, data: {user, type, _id}})
         });
     });
