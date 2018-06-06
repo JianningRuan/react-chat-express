@@ -33,7 +33,7 @@ const Chat = model.getModel('chat');
 
 // socket with express
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+
 
 const user = require('./Router/user');
 const chat = require('./Router/chat');
@@ -50,6 +50,7 @@ server.listen(9093, function () {
 });
 
 // socket
+const io = require('socket.io').listen(server);
 io.on('connection', (socket)=>{
     console.log('链接上了');
     socket.on('sendMsg', (data)=>{
